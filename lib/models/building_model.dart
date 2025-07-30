@@ -1,7 +1,19 @@
-class BuildingModel {
-  final String id;
-  final String name;
-  final List<String> devices;
+import 'device_model.dart';
 
-  BuildingModel({required this.id, required this.name, required this.devices});
+class BuildingModel {
+  final String idBuilding;
+  final String idUser;
+  final String buildingName;
+  final String location;
+  final String urlImages;
+  final List<DeviceModel> devices;
+
+  BuildingModel({
+    required this.idBuilding,
+    required this.idUser,
+    required this.buildingName,
+    required this.location,
+    required this.urlImages,
+    required this.devices,
+  });
 }

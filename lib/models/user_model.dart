@@ -1,13 +1,17 @@
+import 'building_model.dart';
+
 class UserModel {
-  final String id;
-  final String name;
+  final String idUser;
+  final String username;
   final String email;
-  final List<String> buildings;
+  final String password;
+  final List<BuildingModel> buildings;
 
   UserModel({
-    required this.id,
-    required this.name,
+    required this.idUser,
+    required this.username,
     required this.email,
+    required this.password,
     required this.buildings,
   });
 }
