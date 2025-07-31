@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'pages/splash_screen.dart';
 import 'pages/login_page.dart';
+import 'pages/building_page.dart';
 import 'pages/dashboard_page.dart';
 import 'pages/building_detail_page.dart';
 import 'pages/device_detail_page.dart';
 import 'pages/add_building_page.dart';
-import 'pages/add_device_sheet.dart';
 import 'pages/schedule_page.dart';
 import 'pages/statistik_page.dart';
 import 'pages/profile_page.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -35,6 +34,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginPage(),
+        '/building': (context) => const BuildingPage(),
         '/dashboard': (context) => const DashboardPage(),
         '/building_detail': (context) => const BuildingDetailPage(),
         '/device_detail': (context) => const DeviceDetailPage(),

@@ -25,10 +25,41 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
-        child: Text(
-          'PINTAR APP',
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          elevation: 8,
+          margin: const EdgeInsets.symmetric(horizontal: 32),
+          child: Padding(
+            padding: const EdgeInsets.all(40),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.agriculture,
+                  color: Color(0xFF00C48C),
+                  size: 64,
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'PINTAR APP',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF00C48C),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Smart Farming System',
+                  style: TextStyle(fontSize: 18, color: Colors.black54),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
