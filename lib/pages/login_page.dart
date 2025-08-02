@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:ui';
 
 class LoginPage extends StatefulWidget {
@@ -12,8 +13,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
+  final _usernameFocusNode = FocusNode();
   bool _isLogin = true;
   String? _error;
   bool _loading = false;
@@ -39,6 +42,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     _animationController.dispose();
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
+    _usernameFocusNode.dispose();
     super.dispose();
   }
 
@@ -54,10 +58,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           password: _passwordController.text.trim(),
         );
       } else {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        // Create user with email and password
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
+        
+        // Save user data to Firestore
+        await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+          'idUser': userCredential.user!.uid,
+          'username': _usernameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'buildings': [],
+          'createdAt': FieldValue.serverTimestamp(),
+        });
       }
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/dashboard');
@@ -320,6 +334,17 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                   keyboardType: TextInputType.emailAddress,
                                 ),
                                 const SizedBox(height: 20),
+                                
+                                // Username Field (only for registration)
+                                if (!_isLogin) ...[
+                                  _buildModernTextField(
+                                    controller: _usernameController,
+                                    focusNode: _usernameFocusNode,
+                                    label: 'Nama Pengguna',
+                                    prefixIcon: Icons.person_outline,
+                                  ),
+                                  const SizedBox(height: 20),
+                                ],
                                 
                                 // Password Field
                                 _buildModernTextField(
