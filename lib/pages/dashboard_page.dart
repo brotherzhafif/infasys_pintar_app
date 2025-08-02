@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -14,35 +15,34 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildTabSwitcher(),
-            const SizedBox(width: 16),
-            _tabIndex == 0
-                ? Text(
-                    'Data',
-                    style: TextStyle(
-                      color: Color(0xFF00C48C),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                : Text(
-                    'Alat',
-                    style: TextStyle(
-                      color: Color(0xFF00C48C),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-          ],
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFFF8FFFE), Color(0xFFE8F8F5)],
+            ),
+          ),
         ),
+        title: _buildTabSwitcher(),
         centerTitle: true,
       ),
-      body: _tabIndex == 0 ? _buildDataTab() : _buildAlatTab(),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFFF8FFFE), Color(0xFFE8F8F5)],
+          ),
+        ),
+        child: SafeArea(
+          child: _tabIndex == 0 ? _buildDataTab() : _buildAlatTab(),
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF00C48C),
@@ -60,8 +60,14 @@ class _DashboardPageState extends State<DashboardPage> {
             icon: Icon(Icons.grid_view),
             label: 'Dashboard',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Bangunan'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Bangunan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profil',
+          ),
         ],
       ),
     );
@@ -70,8 +76,15 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildTabSwitcher() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
+        color: const Color(0xFFFFFFFF).withOpacity(0.9),
+        borderRadius: BorderRadius.circular(25),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -84,20 +97,23 @@ class _DashboardPageState extends State<DashboardPage> {
     return GestureDetector(
       onTap: () => setState(() => _tabIndex = idx),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: _tabIndex == idx
-              ? const Color(0xFF00C48C)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          gradient: _tabIndex == idx
+              ? const LinearGradient(
+                  colors: [Color(0xFF00C48C), Color(0xFF00A876)],
+                )
+              : null,
+          borderRadius: BorderRadius.circular(25),
         ),
         child: Row(
           children: [
             Text(
               label,
               style: TextStyle(
-                color: _tabIndex == idx ? Colors.white : Colors.black,
-                fontWeight: FontWeight.bold,
+                color: _tabIndex == idx ? Colors.white : const Color(0xFF2D3748),
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
               ),
             ),
             if (label == 'Alat')
@@ -105,12 +121,16 @@ class _DashboardPageState extends State<DashboardPage> {
                 margin: const EdgeInsets.only(left: 6),
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: _tabIndex == idx ? Colors.white : const Color(0xFF00C48C),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   '20',
-                  style: TextStyle(color: Color(0xFF00C48C), fontSize: 12),
+                  style: TextStyle(
+                    color: _tabIndex == idx ? const Color(0xFF00C48C) : Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ), // TODO: dynamic
               ),
           ],
@@ -121,75 +141,175 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _buildDataTab() {
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(24),
       children: [
-        Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 3,
-          child: ListTile(
-            leading: Icon(Icons.settings_remote, color: Color(0xFF00C48C)),
-            title: Text('Mode Otomatis'),
-            trailing: Switch(
-              value: _autoMode,
-              activeColor: Color(0xFF00C48C),
-              onChanged: (val) => setState(() => _autoMode = val),
+        // Mode System Section with Glassmorphism
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF00C48C).withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.settings_remote,
+                      color: Color(0xFF00C48C),
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      'Mode Otomatis',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF2D3748),
+                      ),
+                    ),
+                  ),
+                  Switch(
+                    value: _autoMode,
+                    activeColor: const Color(0xFF00C48C),
+                    activeTrackColor: const Color(0xFF00C48C).withOpacity(0.3),
+                    inactiveThumbColor: const Color(0xFF718096),
+                    inactiveTrackColor: const Color(0xFF718096).withOpacity(0.3),
+                    onChanged: (val) => setState(() => _autoMode = val),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
+        
+        // Data Greenhouse Section
         Text(
           'Data Greenhouse',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF2D3748),
+          ),
         ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        const SizedBox(height: 16),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1,
           children: [
-            _dataCard('Irigasi Tetes', '3 kali', '10.00', Icons.water_drop),
-            _dataCard('Nilai pH', '7 pH', '', Icons.science),
-            _dataCard('Nilai Suhu', '24°C', '', Icons.thermostat),
-            _dataCard('Nilai Kelembaban', '25%', '', Icons.grain),
+            _modernDataCard('Irigasi Tetes', '3 Kali', 'Terakhir Disiram 10.00', Icons.water_drop),
+            _modernDataCard('Nilai pH', '7 pH', 'Terakhir Diukur 10.00', Icons.science),
+            _modernDataCard('Nilai Suhu', '24°C', 'Terakhir Diukur 10.00', Icons.thermostat),
+            _modernDataCard('Nilai Kelembaban', '25%', 'Terakhir Diukur 10.00', Icons.grain),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 32),
+        
+        // Data Kolam Lele Section
         Text(
           'Data Kolam Lele',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF2D3748),
+          ),
         ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        const SizedBox(height: 16),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1,
           children: [
-            _dataCard('Nilai Nutrisi', 'Bagus', '', Icons.eco),
-            _dataCard('Nilai pH', '7 pH', '', Icons.science),
+            _modernDataCard('Nilai Nutrisi', 'Bagus', 'Terakhir Diukur 10.00', Icons.eco),
+            _modernDataCard('Nilai pH', '7 pH', 'Terakhir Diukur 10.00', Icons.science),
           ],
         ),
       ],
     );
   }
 
-  Widget _dataCard(String title, String value, String time, IconData icon) {
-    return Expanded(
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              Icon(icon, color: Color(0xFF00C48C), size: 32),
-              const SizedBox(height: 8),
-              Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(value, style: TextStyle(fontSize: 16)),
-              if (time.isNotEmpty)
-                Text(
-                  'Terakhir: $time',
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-            ],
+  Widget _modernDataCard(String title, String value, String subtitle, IconData icon) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: const Color(0xFF00C48C).withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: const Color(0xFF00C48C),
+                size: 24,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF2D3748),
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF2D3748),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              subtitle,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                color: Color(0xFF718096),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -197,60 +317,120 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _buildAlatTab() {
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(24),
       children: [
+        // Perangkat Greenhouse Section
         Text(
           'Perangkat Greenhouse',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF2D3748),
+          ),
         ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        const SizedBox(height: 16),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 0.9,
           children: [
-            _alatCard('Irigasi Tetes', 4, true, Icons.water_drop),
-            _alatCard('Sensor pH', 9, false, Icons.science),
-            _alatCard('Sensor Suhu', 4, true, Icons.thermostat),
-            _alatCard('Sensor Moist', 4, false, Icons.grain),
+            _modernAlatCard('Irigasi Tetes', 4, true, Icons.water_drop),
+            _modernAlatCard('Sensor pH', 9, false, Icons.science),
+            _modernAlatCard('Sensor Suhu', 4, true, Icons.thermostat),
+            _modernAlatCard('Sensor Moist', 4, false, Icons.grain),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 32),
+        
+        // Perangkat Kolam Lele Section
         Text(
           'Perangkat Kolam Lele',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF2D3748),
+          ),
         ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        const SizedBox(height: 16),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 0.9,
           children: [
-            _alatCard('Irigasi Tetes', 3, true, Icons.water_drop),
-            _alatCard('Sensor pH', 3, false, Icons.science),
-            _alatCard('Sensor Nutrisi', 3, true, Icons.eco),
+            _modernAlatCard('Irigasi Tetes', 3, true, Icons.water_drop),
+            _modernAlatCard('Sensor pH', 3, false, Icons.science),
+            _modernAlatCard('Sensor Nutrisi', 3, true, Icons.eco),
           ],
         ),
       ],
     );
   }
 
-  Widget _alatCard(String title, int count, bool isActive, IconData icon) {
-    return Expanded(
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              Icon(icon, color: Color(0xFF00C48C), size: 32),
-              const SizedBox(height: 8),
-              Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('$count device', style: TextStyle(fontSize: 16)),
-              Switch(
-                value: isActive,
-                activeColor: Color(0xFF00C48C),
-                onChanged: (val) {}, // TODO: update status
-              ),
-            ],
+  Widget _modernAlatCard(String title, int count, bool isActive, IconData icon) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: const Color(0xFF00C48C).withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: const Color(0xFF00C48C),
+                size: 20,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF2D3748),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '$count device',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF2D3748),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Switch(
+              value: isActive,
+              activeColor: const Color(0xFF00C48C),
+              activeTrackColor: const Color(0xFF00C48C).withOpacity(0.3),
+              inactiveThumbColor: const Color(0xFF718096),
+              inactiveTrackColor: const Color(0xFF718096).withOpacity(0.3),
+              onChanged: (val) {}, // TODO: update status
+            ),
+          ],
         ),
       ),
     );
