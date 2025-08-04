@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+  
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
