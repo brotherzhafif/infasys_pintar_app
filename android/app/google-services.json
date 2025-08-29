@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "218371854036",
+    "firebase_url": "https://pandowo-pintar-app-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "pandowo-pintar-app",
     "storage_bucket": "pandowo-pintar-app.firebasestorage.app"
   },
@@ -10,6 +11,25 @@
         "mobilesdk_app_id": "1:218371854036:android:9aef34caa12000f95f3541",
         "android_client_info": {
           "package_name": "com.example.infasys_pintar_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgOCk0K2hPZV75zPL769dn4eHiE3ZTLro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218371854036:android:55ec79b26dc6cdae5f3541",
+        "android_client_info": {
+          "package_name": "id.pandowo.farm"
         }
       },
       "oauth_client": [],

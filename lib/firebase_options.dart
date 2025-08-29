@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -57,6 +54,18 @@ class DefaultFirebaseOptions {
     appId: '1:218371854036:android:9aef34caa12000f95f3541',
     messagingSenderId: '218371854036',
     projectId: 'pandowo-pintar-app',
+    databaseURL: 'https://pandowo-pintar-app-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'pandowo-pintar-app.firebasestorage.app',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyC_sOrwdQ6Mwm7JTBruvm07XE947zu6UfM',
+    appId: '1:218371854036:web:d52a33f74b99293b5f3541',
+    messagingSenderId: '218371854036',
+    projectId: 'pandowo-pintar-app',
+    authDomain: 'pandowo-pintar-app.firebaseapp.com',
+    databaseURL: 'https://pandowo-pintar-app-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'pandowo-pintar-app.firebasestorage.app',
+  );
+
 }
