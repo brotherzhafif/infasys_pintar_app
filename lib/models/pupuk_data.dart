@@ -1,8 +1,7 @@
 class PupukData {
-  final int detik;
   final int menit;
   final int jam;
-  final int hari;
+  final String hari;
   final int tanggal;
   final int bulan;
   final int tahun;
@@ -12,7 +11,6 @@ class PupukData {
   final double pH;
 
   PupukData({
-    required this.detik,
     required this.menit,
     required this.jam,
     required this.hari,
@@ -27,10 +25,9 @@ class PupukData {
 
   factory PupukData.fromMap(Map<String, dynamic> map) {
     return PupukData(
-      detik: map['Detik'] ?? 0,
       menit: map['Menit'] ?? 0,
       jam: map['Jam'] ?? 0,
-      hari: map['Hari'] ?? 0,
+      hari: map['Hari'] ?? "",
       tanggal: map['Tanggal'] ?? 0,
       bulan: map['Bulan'] ?? 0,
       tahun: map['Tahun'] ?? 0,

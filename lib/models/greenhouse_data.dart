@@ -1,8 +1,7 @@
 class GreenhouseData {
-  final int detik;
   final int menit;
   final int jam;
-  final int hari;
+  final String hari;
   final int tanggal;
   final int bulan;
   final int tahun;
@@ -16,13 +15,8 @@ class GreenhouseData {
   final double soilN;
   final double soilP;
   final double soilK;
-  final bool lampu;
-  final bool pompaAir;
-  final int pompaDuration;
-  final bool pompaPupuk;
 
   GreenhouseData({
-    required this.detik,
     required this.menit,
     required this.jam,
     required this.hari,
@@ -39,18 +33,13 @@ class GreenhouseData {
     required this.soilN,
     required this.soilP,
     required this.soilK,
-    required this.lampu,
-    required this.pompaAir,
-    required this.pompaDuration,
-    required this.pompaPupuk,
   });
 
   factory GreenhouseData.fromMap(Map<String, dynamic> map) {
     return GreenhouseData(
-      detik: map['Detik'] ?? 0,
       menit: map['Menit'] ?? 0,
       jam: map['Jam'] ?? 0,
-      hari: map['Hari'] ?? 0,
+      hari: map['Hari'] ?? "",
       tanggal: map['Tanggal'] ?? 0,
       bulan: map['Bulan'] ?? 0,
       tahun: map['Tahun'] ?? 0,
@@ -64,10 +53,6 @@ class GreenhouseData {
       soilN: (map['SoilN'] ?? 0).toDouble(),
       soilP: (map['SoilP'] ?? 0).toDouble(),
       soilK: (map['SoilK'] ?? 0).toDouble(),
-      lampu: map['lampu'] ?? false,
-      pompaAir: map['pompa_air'] ?? false,
-      pompaDuration: map['pompa_duration'] ?? 0,
-      pompaPupuk: map['pompa_pupuk'] ?? false,
     );
   }
 }
