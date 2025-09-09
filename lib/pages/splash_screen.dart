@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,13 +11,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 1), () {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        Navigator.pushReplacementNamed(context, '/login');
-      } else {
-        Navigator.pushReplacementNamed(context, '/dashboard');
-      }
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context, '/dashboard');
     });
   }
 
@@ -38,11 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.agriculture,
-                  color: Color(0xFF00C48C),
-                  size: 64,
-                ),
+                Image.asset('assets/app_icon.png', width: 80, height: 80),
                 const SizedBox(height: 24),
                 const Text(
                   'PINTAR APP',
