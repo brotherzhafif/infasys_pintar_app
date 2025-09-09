@@ -12,8 +12,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int _tabIndex = 0; // 0: Data, 1: Alat
-  bool _autoMode = true;
+  int _tabIndex = 0; // 0: Data, 1: Control
 
   GreenhouseData? _greenhouseData;
   PupukData? _pupukData;
@@ -77,103 +76,34 @@ class _DashboardPageState extends State<DashboardPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildTabSwitcher(),
-            const SizedBox(width: 16),
-            _tabIndex == 0
-                ? Text(
-                    'Data',
-                    style: TextStyle(
-                      color: Color(0xFF00C48C),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                : Text(
-                    'Alat',
-                    style: TextStyle(
-                      color: Color(0xFF00C48C),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-          ],
+        title: Text(
+          'PPKO HMTP 2025',
+          style: TextStyle(
+            color: Color(0xFF00C48C),
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
         centerTitle: true,
       ),
-      body: _tabIndex == 0 ? _buildDataTab() : _buildAlatTab(),
+      body: _tabIndex == 0 ? _buildDataTab() : _buildControlTab(),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF00C48C),
         unselectedItemColor: Colors.grey,
-        currentIndex: 0,
+        currentIndex: _tabIndex,
         onTap: (idx) {
-          if (idx == 1) {
-            Navigator.pushReplacementNamed(context, '/building');
-          } else if (idx == 2) {
-            Navigator.pushReplacementNamed(context, '/profile');
-          }
+          setState(() {
+            _tabIndex = idx;
+          });
         },
         items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Data'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view),
-            label: 'Dashboard',
+            icon: Icon(Icons.settings_remote),
+            label: 'Control',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Bangunan'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTabSwitcher() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [_tabButton('Data', 0), _tabButton('Alat', 1)],
-      ),
-    );
-  }
-
-  Widget _tabButton(String label, int idx) {
-    return GestureDetector(
-      onTap: () => setState(() => _tabIndex = idx),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-        decoration: BoxDecoration(
-          color: _tabIndex == idx
-              ? const Color(0xFF00C48C)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: _tabIndex == idx ? Colors.white : Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            if (label == 'Alat')
-              Container(
-                margin: const EdgeInsets.only(left: 6),
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  '20',
-                  style: TextStyle(color: Color(0xFF00C48C), fontSize: 12),
-                ), // TODO: dynamic
-              ),
-          ],
-        ),
       ),
     );
   }
@@ -182,142 +112,157 @@ class _DashboardPageState extends State<DashboardPage> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text(
-          'Data Greenhouse',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        // Header Data Greenhouse dengan update time
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Data Greenhouse',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            if (_greenhouseData != null)
+              Text(
+                'Update: ${_greenhouseData!.jam}:${_greenhouseData!.menit.toString().padLeft(2, '0')}',
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              ),
+          ],
         ),
         const SizedBox(height: 8),
         if (_greenhouseData != null) ...[
-          // Baris pertama - data iklim
+          // Baris pertama - 2 card
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _dataCard(
                 'Suhu Udara',
                 '${_greenhouseData!.suhuUdara.toStringAsFixed(1)}°C',
-                '${_greenhouseData!.jam}:${_greenhouseData!.menit.toString().padLeft(2, '0')}',
                 Icons.thermostat,
               ),
+              const SizedBox(width: 8),
               _dataCard(
                 'Kelembaban',
                 '${_greenhouseData!.kelembapanUdara.toStringAsFixed(1)}%',
-                '',
                 Icons.water_drop,
-              ),
-              _dataCard(
-                'TDS',
-                '${_greenhouseData!.tds.toInt()} ppm',
-                '',
-                Icons.opacity,
               ),
             ],
           ),
           const SizedBox(height: 8),
-          // Baris kedua - data tanah
+          // Baris kedua - 2 card
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              _dataCard(
+                'TDS',
+                '${_greenhouseData!.tds.toInt()} ppm',
+                Icons.opacity,
+              ),
+              const SizedBox(width: 8),
               _dataCard(
                 'Soil pH',
                 '${_greenhouseData!.soilpH.toStringAsFixed(1)}',
-                '',
                 Icons.science,
               ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Baris ketiga - 2 card
+          Row(
+            children: [
               _dataCard(
                 'Soil Moisture',
                 '${_greenhouseData!.soilMoist.toStringAsFixed(1)}%',
-                '',
                 Icons.grain,
               ),
+              const SizedBox(width: 8),
               _dataCard(
                 'Soil Temp',
                 '${_greenhouseData!.soilTemp.toStringAsFixed(1)}°C',
-                '',
                 Icons.device_thermostat,
               ),
             ],
           ),
           const SizedBox(height: 8),
-          // Baris ketiga - nutrisi tanah
+          // Baris keempat - 2 card
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _dataCard(
                 'Nitrogen (N)',
                 '${_greenhouseData!.soilN.toStringAsFixed(1)} mg/L',
-                '',
                 Icons.eco,
               ),
+              const SizedBox(width: 8),
               _dataCard(
                 'Fosfor (P)',
                 '${_greenhouseData!.soilP.toStringAsFixed(1)} mg/L',
-                '',
                 Icons.local_florist,
-              ),
-              _dataCard(
-                'Kalium (K)',
-                '${_greenhouseData!.soilK.toStringAsFixed(1)} mg/L',
-                '',
-                Icons.grass,
               ),
             ],
           ),
           const SizedBox(height: 8),
-          // Soil EC
+          // Baris kelima - 2 card
           Row(
             children: [
               _dataCard(
+                'Kalium (K)',
+                '${_greenhouseData!.soilK.toStringAsFixed(1)} mg/L',
+                Icons.grass,
+              ),
+              const SizedBox(width: 8),
+              _dataCard(
                 'Soil EC',
                 '${_greenhouseData!.soilEC.toStringAsFixed(2)} mS/cm',
-                '',
                 Icons.electrical_services,
               ),
-              Expanded(child: Container()), // Spacer
-              Expanded(child: Container()), // Spacer
             ],
           ),
         ],
         const SizedBox(height: 24),
-        Text(
-          'Data Kolam Lele',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        // Header Data Kolam Lele dengan update time
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Data Kolam Lele',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            if (_pupukData != null)
+              Text(
+                'Update: ${_pupukData!.jam}:${_pupukData!.menit.toString().padLeft(2, '0')}',
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              ),
+          ],
         ),
         const SizedBox(height: 8),
         if (_pupukData != null) ...[
+          // Baris pertama - 2 card
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _dataCard(
                 'NH3',
                 '${_pupukData!.nh3.toStringAsFixed(1)} ppm',
-                '${_pupukData!.jam}:${_pupukData!.menit.toString().padLeft(2, '0')}',
                 Icons.cloud,
               ),
+              const SizedBox(width: 8),
               _dataCard(
                 'Suhu Air',
                 '${_pupukData!.suhu.toStringAsFixed(1)}°C',
-                '',
                 Icons.thermostat,
-              ),
-              _dataCard(
-                'pH Air',
-                '${_pupukData!.pH.toStringAsFixed(1)}',
-                '',
-                Icons.science,
               ),
             ],
           ),
           const SizedBox(height: 8),
+          // Baris kedua - 2 card
           Row(
             children: [
               _dataCard(
+                'pH Air',
+                '${_pupukData!.pH.toStringAsFixed(1)}',
+                Icons.science,
+              ),
+              const SizedBox(width: 8),
+              _dataCard(
                 'TDS Air',
                 '${_pupukData!.tds.toInt()} ppm',
-                '',
                 Icons.opacity,
               ),
-              Expanded(child: Container()), // Spacer
-              Expanded(child: Container()), // Spacer
             ],
           ),
         ],
@@ -335,33 +280,28 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _dataCard(String title, String value, String time, IconData icon) {
+  Widget _dataCard(String title, String value, IconData icon) {
     return Expanded(
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 2,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              Icon(icon, color: Color(0xFF00C48C), size: 32),
-              const SizedBox(height: 8),
+              Icon(icon, color: Color(0xFF00C48C), size: 40),
+              const SizedBox(height: 12),
               Text(
                 title,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 8),
               Text(
                 value,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
               ),
-              if (time.isNotEmpty)
-                Text(
-                  'Update: $time',
-                  style: TextStyle(fontSize: 10, color: Colors.grey),
-                  textAlign: TextAlign.center,
-                ),
             ],
           ),
         ),
@@ -434,7 +374,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 Text(
-                  '$duration detik',
+                  '$duration Menit',
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
@@ -478,7 +418,7 @@ class _DashboardPageState extends State<DashboardPage> {
     await _database.child('control').child(path).set(newDuration);
   }
 
-  Widget _buildAlatTab() {
+  Widget _buildControlTab() {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -541,7 +481,7 @@ class _DashboardPageState extends State<DashboardPage> {
           const SizedBox(height: 24),
           // Duration Settings
           Text(
-            'Pengaturan Durasi (detik)',
+            'Pengaturan Durasi (Menit)',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 8),

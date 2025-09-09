@@ -44,8 +44,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 const SizedBox(height: 12),
                 const Text(
-                  'Smart Farming System',   
+                  'Pandowo Integrated Farming Center',
                   style: TextStyle(fontSize: 18, color: Colors.black54),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Dibuat oleh\n PPKO HMTP 2025',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
             ),
