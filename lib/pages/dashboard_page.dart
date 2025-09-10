@@ -3,6 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import '../models/greenhouse_data.dart';
 import '../models/pupuk_data.dart';
 import '../models/control_data.dart';
+import '../services/background_service.dart';
+import '../services/background_monitoring_service.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -26,6 +28,19 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     _loadData();
+    _requestBatteryOptimization();
+  }
+
+  void _requestBatteryOptimization() async {
+    // Request battery optimization permission setelah 3 detik
+    Future.delayed(Duration(seconds: 3), () {
+      BackgroundService.requestBatteryOptimization(context);
+    });
+
+    // Ensure background service is running
+    Future.delayed(Duration(seconds: 5), () async {
+      await BackgroundMonitoringService.startService();
+    });
   }
 
   void _loadData() {

@@ -4,6 +4,7 @@ import 'pages/dashboard_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'services/notification_service.dart';
+import 'services/background_monitoring_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +13,11 @@ void main() async {
   // Initialize notification service
   await NotificationService.initialize();
 
-  // Start background sensor monitoring
+  // Initialize and start background monitoring service
+  await BackgroundMonitoringService.initializeService();
+  await BackgroundMonitoringService.startService();
+
+  // Also start foreground monitoring for when app is active
   await NotificationService.startSensorMonitoring();
 
   runApp(const MyApp());
