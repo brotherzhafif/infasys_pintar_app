@@ -16,10 +16,11 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
+  static const Color primaryColor = Color.fromARGB(255, 8, 182, 110);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: primaryColor,
       body: Center(
         child: Card(
           shape: RoundedRectangleBorder(
@@ -39,12 +40,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF00C48C),
+                    color: primaryColor,
                   ),
                 ),
                 const SizedBox(height: 12),
                 const Text(
                   'Pandowo Integrated Farming Center',
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18, color: Colors.black54),
                 ),
                 const SizedBox(height: 16),
