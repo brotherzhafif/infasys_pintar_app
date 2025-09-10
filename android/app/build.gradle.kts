@@ -17,18 +17,18 @@ android {
     ndkVersion = "27.0.12077973"
 
     // FOR ANDROID RELEASE
-    // signingConfigs {
-    //     create("release") {
-    //         val keystorePropertiesFile = rootProject.file("key.properties")
-    //         val keystoreProperties = Properties()
-    //         keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+    signingConfigs {
+        create("release") {
+            val keystorePropertiesFile = rootProject.file("key.properties")
+            val keystoreProperties = Properties()
+            keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
-    //         keyAlias = keystoreProperties["keyAlias"] as String
-    //         keyPassword = keystoreProperties["keyPassword"] as String
-    //         storeFile = file(keystoreProperties["storeFile"] as String)
-    //         storePassword = keystoreProperties["storePassword"] as String
-    //     }
-    // }
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+        }
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -48,18 +48,18 @@ android {
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = 5
-        versionName = "0.2.0"
+        versionName = "1.1.0"
     }
 
     buildTypes {
         release {
             // FOR DEBUG
-            signingConfig = signingConfigs.getByName("debug")
+            // signingConfig = signingConfigs.getByName("debug")
 
-            // FOR ANDROID RELEASE
-            // signingConfig = signingConfigs.getByName("release")
-            // isMinifyEnabled = true
-            // proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            FOR ANDROID RELEASE
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }
