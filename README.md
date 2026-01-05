@@ -11,15 +11,6 @@
 ---
 
 ## 🏗️ Arsitektur Sistem
-
-```mermaid
-flowchart TD
-    ESP32[ESP32 Sensor/Actuator] -->|Wi-Fi| MQTT[MQTT Broker / REST API]
-    MQTT --> Firebase[Firebase (Firestore + Auth)]
-    Firebase --> App[Flutter App (PINTAR)]
-    App --> Firebase
-```
-
 **Komponen Utama:**
 
 - **ESP32**: Perangkat IoT untuk membaca dan mengendalikan lingkungan (sensor suhu, pH, kelembaban, pompa air, dll).
